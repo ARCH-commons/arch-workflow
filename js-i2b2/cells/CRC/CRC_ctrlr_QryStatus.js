@@ -442,8 +442,8 @@ i2b2.CRC.ctrlr.QueryStatus.prototype = function() {
 					brdNodeList, brdNode,  brdIdx, brdObj;
 
 				//iterate through each query result.
-				for (qriIdx = 0; qriIdx < qriNodeList.length; qriIdx++) {
 
+				for (qriIdx = 0; qriIdx < qriNodeList.length; qriIdx++) {
 					//init qri vars.
 					qriNode         =  qriNodeList[qriIdx];
 					qriObj          = parseQueryResultInstance(qriNode);
@@ -453,6 +453,14 @@ i2b2.CRC.ctrlr.QueryStatus.prototype = function() {
 					self.dispDIV.innerHTML += '<div style="clear:both;"><br/><div style="float:left; font-weight:bold; margin-left:20px;">' + qriObj.description + ' "' +self.QM.name+ '"</div>';
 					resultString += '\n'; //BG
 					resultString += qriObj.description + ' "' + self.QM.name+ '"\n'; //BG
+
+					// jgk: how long did it take?
+					var howlong;
+					if (qriNode.getElementsByTagName("end_date").length==0 || qriNode.getElementsByTagName("end_date").length==0) {
+						howlong=-1;
+					} else  {
+						howlong = Date.parse(qriNode.getElementsByTagName("end_date")[0].innerHTML)-Date.parse(qriNode.getElementsByTagName("start_date")[0].innerHTML)
+					}
 
 					//if there was an error display it.
 					if((qriObj.statusName == "ERROR") || (qriObj.statusName == "UNAVAILABLE")){
@@ -478,9 +486,11 @@ i2b2.CRC.ctrlr.QueryStatus.prototype = function() {
 						+ "Patient Count"
 						+ ": <font color=\"#0000dd\">"
 						+ i2b2.h.getFormattedResult(qriObj.setSize)
-						+ "</font></div>";
+						+ "</font> [" 
+						+ howlong/1000
+						+ " seconds]</div>";
 
-					resultString += 'Patient Count' + i2b2.h.getFormattedResult(qriObj.setSize) + '\n'; //BG
+					resultString += 'Patient Count' + i2b2.h.getFormattedResult(qriObj.setSize) + ' ['+howlong/1000 +' seconds]\n'; //BG
 					
 					
 					//grab breakdown data.
