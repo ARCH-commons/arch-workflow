@@ -43,8 +43,8 @@
 			{thinClientName:'sortBy', defaultValue:'DATE'},
 			{thinClientName:'sortOrder', defaultValue:'DESC'},
 			{thinClientName:'maxQueriesDisp', defaultValue:20},
-			{thinClientName:'maxChildren', defaultValue:200},
-			{thinClientName:'queryTimeout', defaultValue:180}
+			{thinClientName:'maxChildren', defaultValue:500},
+			{thinClientName:'queryTimeout', defaultValue:60}
 		]
 	}
 }
