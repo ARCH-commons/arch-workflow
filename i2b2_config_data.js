@@ -12,7 +12,7 @@
 	// THESE ARE ALL THE DOMAINS A USER CAN LOGIN TO
 	lstDomains: [
 		{ 
-		  domain: "i2b2demo",
+		  domain: "shrinescilhs",
 		  name: "SHRINE",
 		  isSHRINE: true,
 		  debug: true,
