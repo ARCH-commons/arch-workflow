@@ -523,6 +523,8 @@ i2b2.CRC.ctrlr.QueryStatus.prototype = function() {
 				i2b2.CRC.ctrlr.currentQueryResults = new i2b2.CRC.ctrlr.QueryResults(resultString);
 				$hrine.EnhancedError.createErrorDialogue(self.dispDIV, errorObjects);
 				i2b2.CRC.ctrlr.history.Refresh();
+				i2b2.CRC.view.status.selectTab("graphs");
+				i2b2.CRC.view.graphs.showDisplay();
 			}
 			catch(err)
 			{
