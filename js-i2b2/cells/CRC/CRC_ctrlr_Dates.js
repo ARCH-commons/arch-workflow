@@ -6,7 +6,7 @@
  * @version 	1.3
  * ----------------------------------------------------------------------------------------
  * updated 9-15-08: RC4 launch [Nick Benik] 
- */
+ **/
 console.group('Load & Execute component file: CRC > ctrlr > Dates');
 console.time('execute time');
 

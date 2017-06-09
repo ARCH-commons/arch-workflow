@@ -20,6 +20,8 @@
 		  ///urlCellPM: "http://192.168.169.129/i2b2/services/PMService/",
 		  allowAnalysis: true
 		}
-	]
+	],
 	// -------------------------------------------------------------------------------------------
+	ui: { 'topWidth':840,'topHeight':517,'bottomHeight':344,'bottomSpacer':396,'bottomPQHeight':144,'bottomPQSpacer':196,'minEverythingHeight':634 }
+	// topWidth/Height refers to the query tool panels. This is not fully implemented at this time; some are hardcoded.
 }

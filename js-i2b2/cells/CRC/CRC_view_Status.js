@@ -92,8 +92,8 @@ i2b2.CRC.view.status.Resize = function(e) {
  	    var w =  window.innerWidth || (window.document.documentElement.clientWidth || window.document.body.clientWidth);
  	    var h =  window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
 		
-		if (w < 840) {w = 840;}
-		if (h < 517) {h = 517;}
+        if (w < i2b2.hive.cfg.ui.topWidth) {w = i2b2.hive.cfg.ui.topWidth;}
+        if (h < i2b2.hive.cfg.ui.topHeight) {h = i2b2.hive.cfg.ui.topHeight;}
 		
 		// resize our visual components
 		var ve = $('crcStatusBox');
@@ -111,11 +111,11 @@ i2b2.CRC.view.status.Resize = function(e) {
 					if (YAHOO.env.ua.ie > 0) {  
 						ve.top = h-135; //196+44;
 					} else {
-						ve.top = h-152; //196+44;
+						ve.top = h-i2b2.hive.cfg.ui.bottomSpacer+44; //was 152=196+44;
 					}
 				} else {
-					$('infoQueryStatusText').style.height = '144px';
-					ve.top = h-196;
+					$('infoQueryStatusText').style.height = i2b2.hive.cfg.ui.bottomHeight;
+					ve.top = h-i2b2.hive.cfg.ui.bottomSpacer;
 				}
 				break;
 			default:
@@ -145,7 +145,7 @@ i2b2.CRC.view.status.ResizeHeight = function()
 	if (viewObj.visible) {
 		///var ds = document.viewport.getDimensions();
  	    var h =  window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
-		if (h < 517) {h = 517;}
+        if (h < i2b2.hive.cfg.ui.topHeight) {h = i2b2.hive.cfg.ui.topHeight;}
 		// resize our visual components
 		var ve = $('crcStatusBox');
 		ve.show();
@@ -165,7 +165,7 @@ i2b2.CRC.view.status.ResizeHeight = function()
 						$('infoQueryStatusChart').style.height = '100px';//BG
 						$('infoQueryStatusReport').style.height = '100px';//BG
 						$('infoDownloadStatusData').style.height = '100px';//BG
-						ve.top = h-198;
+						ve.top = h-i2b2.hive.cfg.ui.bottomSpacer-2;
 						$('crcQueryToolBox').show();
 						
 					}				
@@ -180,11 +180,11 @@ i2b2.CRC.view.status.ResizeHeight = function()
 						ve.top = 45;
 						$('crcQueryToolBox').hide();
 					} else {
-						$('infoQueryStatusText').style.height = '144px';
-						$('infoQueryStatusChart').style.height = '144px';//BG
-						$('infoQueryStatusReport').style.height = '144px';//BG
-						$('infoDownloadStatusData').style.height = '144px';//BG
-						ve.top = h-196;
+						$('infoQueryStatusText').style.height = i2b2.hive.cfg.ui.bottomHeight;
+						$('infoQueryStatusChart').style.height = i2b2.hive.cfg.ui.bottomHeight;//BG
+						$('infoQueryStatusReport').style.height = i2b2.hive.cfg.ui.bottomHeight;//BG
+						$('infoDownloadStatusData').style.height = i2b2.hive.cfg.ui.bottomHeight;//BG
+						ve.top = h-i2b2.hive.cfg.ui.bottomSpacer;
 						$('crcQueryToolBox').show();
 					}
 					
