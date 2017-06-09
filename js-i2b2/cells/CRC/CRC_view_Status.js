@@ -107,7 +107,7 @@ i2b2.CRC.view.status.Resize = function(e) {
 				//ve.left = w-550;
 				//ve.width = 524;
 				if (i2b2.WORK && i2b2.WORK.isLoaded) {
-					$('infoQueryStatusText').style.height = '100px';
+					$('infoQueryStatusText').style.height = h-i2b2.hive.cfg.ui.bottomHeight-44;
 					if (YAHOO.env.ua.ie > 0) {  
 						ve.top = h-135; //196+44;
 					} else {
@@ -161,10 +161,10 @@ i2b2.CRC.view.status.ResizeHeight = function()
 						ve.top = 45;
 						$('crcQueryToolBox').hide();
 					} else {
-						$('infoQueryStatusText').style.height = '100px';
-						$('infoQueryStatusChart').style.height = '100px';//BG
-						$('infoQueryStatusReport').style.height = '100px';//BG
-						$('infoDownloadStatusData').style.height = '100px';//BG
+						$('infoQueryStatusText').style.height = 
+						$('infoQueryStatusChart').style.height = h-i2b2.hive.cfg.ui.bottomHeight-44;//BG
+						$('infoQueryStatusReport').style.height = h-i2b2.hive.cfg.ui.bottomHeight-44;//BG
+						$('infoDownloadStatusData').style.height = h-i2b2.hive.cfg.ui.bottomHeight-44;//BG
 						ve.top = h-i2b2.hive.cfg.ui.bottomSpacer-2;
 						$('crcQueryToolBox').show();
 						
@@ -210,6 +210,7 @@ i2b2.events.initView.subscribe((function(eventTypeName, newMode) {
 	this.visible = true;
 	$('crcStatusBox').show();
 	this.Resize();
+	this.ResizeHeight(); // jgk - force dynamic size of bottom tabs
 // -------------------------------------------------------
 }),'',i2b2.CRC.view.status);
 
