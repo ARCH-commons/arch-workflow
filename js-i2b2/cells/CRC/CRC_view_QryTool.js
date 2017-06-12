@@ -1297,6 +1297,7 @@ i2b2.events.initView.subscribe((function (eventTypeName, newMode) {
     this.visible = true;
     $('crcQueryToolBox').show();
     this.Resize();
+    this.ResizeHeight(); // jgk - Fix intermittent size problem upon init
 
     // initialize the dropdown menu for query timing
     var temporalConstraintBar = $("temporalConstraintBar");
