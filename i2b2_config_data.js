@@ -3,8 +3,8 @@
 	urlFramework: "js-i2b2/",
 	loginTimeout: 15, // in seconds
 	//JIRA|SHRINE-519:Charles McGow
-	username_label:"test username:", //Username Label
-	password_label:"test password:", //Password Label
+	username_label:"username:", //Username Label
+	password_label:"password:", //Password Label
     clientHelpUrl:'help/help.pdf',
     networkHelpUrl:'http://www.google.com',
 	//JIRA|SHRINE-519:Charles McGow

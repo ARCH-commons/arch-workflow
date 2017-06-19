@@ -516,6 +516,7 @@ var sCheckForNothing = "something";  // this gets checked to be a zero length st
 							asInputFragments[iFragmentArrayCounter][2] = sLatestSite;
 							asInputFragments[iFragmentArrayCounter][3] = sLatestElementName;
 							asInputFragments[iFragmentArrayCounter][4] = i2b2.CRC.view.graphs.sValueOfSHRINEText(iLatestQuantity);
+							asInputFragments[iFragmentArrayCounter][4] ="undefined #" ? "<10" : asInputFragments[iFragmentArrayCounter][4]; // JGK hack - support for obfuscation (but hardcoded!)
 							asInputFragments[iFragmentArrayCounter][5] = asInputSentences[i];
 							iFragmentArrayCounter++; 
 						} else if (i2b2.CRC.view.graphs.asTitleOfShrineGroup.indexOf(asInputSentences[i]) > -1) {
