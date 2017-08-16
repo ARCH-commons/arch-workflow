@@ -121,6 +121,8 @@ i2b2.PM._processUserConfig = function (data) {
 	if (i2b2.PM.model.reLogin) {
 		i2b2.h.LoadingMask.hide();
 		try { i2b2.PM.view.modal.login.hide(); } catch(e) {}
+			try { document.getElementById("ARCH_status").hide(); } catch(e) {} // ARCH-specific: hide status window
+
 		i2b2.PM.model.reLogin = false;
 		
 		return;
@@ -145,6 +147,8 @@ i2b2.PM._processUserConfig = function (data) {
 
 	// hide the modal form if needed
 	try { i2b2.PM.view.modal.login.hide(); } catch(e) {}
+	try { document.getElementById("ARCH_status").hide(); } catch(e) {}
+	  // ARCH-specific: hide status window
 
 	i2b2.PM.cfg.cellURL = i2b2.PM.model.url;  // remember the url
 	// if user has more than one project display a modal dialog box to have them select one
@@ -218,6 +222,8 @@ i2b2.PM._processUserConfig = function (data) {
 			//alert("Your account does not have access to any i2b2 projects.");		
 		}
 		try { i2b2.PM.view.modal.login.show(); } catch(e) {}
+		try { document.getElementById("ARCH_status").show(); } catch(e) {} // ARCH-specific: hide status window...
+
 		return true;
 	} else if (projs.length == 1) {
 		// default to the only project the user has access to

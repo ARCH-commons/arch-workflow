@@ -331,8 +331,10 @@ $.noConflict();
 
 </head>
 <body class="yui-skin-sam">
+
 <div id="title-back"></div>
 <div class="pageMask" id="topMask" style="display:none;">&nbsp;</div>
+
 
 <div id="project-request-viewer-panel" style="display:none;">
     <div class="hd">i2b2 Web Client Project Request</div>
@@ -383,11 +385,11 @@ $.noConflict();
     <div class="ft"></div>
 </div>
 
-
+ 
 
 <table border="0" cellspacing="0" cellpadding="0" width="100%" id="topBarTable">
     <tr>
-        <td align="left" valign="middle"><img src="assets/images/title.gif" id="topBarTitle" border="0" alt="" /></td>
+        <td align="left" valign="middle"><img src="assets/images/title.png" id="topBarTitle" border="0" alt="" /></td>
         <td align="left" valign="middle"><div id="viewMode-Project"></div></td>
         <td align="right" valign="middle"><div id="viewMode-User"></div></td>
 
@@ -423,6 +425,10 @@ $.noConflict();
                 <a href="Javascript:void(0);" onClick="i2b2.PM.doLogout();">Logout</a>		</div>	</td>
     </tr>
 </table>
+
+
+<!-- ARCH-specific: status iframe -->
+<IFRAME id="ARCH_status" WIDTH=450 HEIGHT=500 FRAMEBORDER=1 SRC="http://publish.smartsheet.com/9732d8d6e04b4248883ee26c398fdf2f"></IFRAME>
 
 
 <div id="screenQueryData" style="display:none">
