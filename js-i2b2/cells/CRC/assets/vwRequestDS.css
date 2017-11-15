@@ -1,0 +1,225 @@
+/*** CSS for main plugin wrapper ***/
+
+DIV#RequestDataSet-mainDiv {
+}
+
+H1 {
+  font: 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 0 0 0 0;
+  display: block;
+  border-bottom: 1px solid #DADADA;
+  margin: 0px 0px 10px 0px;
+  color: #63758C;
+}
+
+.RequestDataSet-button {
+    cursor:pointer;
+    -webkit-box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+    -moz-box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+    box-shadow:rgba(0,0,0,0.98) 0 1px 0 0;
+    background-color:#EEE;
+    border-radius:3px;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border:1px solid #999;
+    color:#333;
+    font-family:'Lucida Grande',Tahoma,Verdana,Arial,Sans-serif;
+    font-size:12px;
+    font-weight:700;
+    padding:2px 10px;
+    height:30px;
+    margin-left: 0px;
+}
+
+
+DIV#RequestDataSet-mainDiv DIV.droptrgt {
+padding: 8px 7px;
+background: #DEEBEF;
+margin-top: 15px;
+text-align: left;
+border: 1px solid #63758C;
+width: 75%;
+overflow: hidden;
+color: #63758C;
+border-radius: 4px;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+text-shadow: 1px 1px 1px #FFF;
+}
+
+DIV#RequestDataSet-mainDiv DIV.nodroptrgt {
+margin-top: 15px;
+text-align: left;
+width: 75%;
+}
+
+
+DIV#RequestDataSet-mainDiv DIV.droptrgtlbl {
+	padding: 6px 0px;
+	width:100px;
+	text-align:right;
+	float: left;
+	font-weight:bold;
+	color:#666;
+	margin: 15px 10px 0px 0px;
+}
+DIV#RequestDataSet-mainDiv DIV.droptrgt {
+	padding: 0;
+	background: #DEEBEF;
+	margin-top: 15px;
+	text-align:left;
+	border: 1px solid #63758C;
+	overflow:hidden;
+	white-space:nowrap;
+	width:75%;
+}
+DIV#RequestDataSet-mainDiv #RequestDataSet-PRSDROP {
+	padding: 8px 0px;
+	overflow:hidden;
+	white-space:nowrap;
+}
+
+
+DIV#RequestDataSet-mainDiv DIV.droptrgt .concptItem {
+	padding: 8px 0px;
+	overflow:hidden;
+	white-space:nowrap;
+	display:block;
+	
+	text-decoration:none;
+}
+DIV#RequestDataSet-mainDiv DIV.droptrgt .concptItem:hover {
+	background-color:#FCC;
+}
+DIV#RequestDataSet-mainDiv DIV.droptrgt .concptDiv {
+	height:1px;
+	overflow:hidden;
+	background-color:#63758C;
+}
+DIV#RequestDataSet-mainDiv #RequestDataSet-DeleteMsg {
+	font-size:11px;
+	margin: 2px 0 0 90px;
+	display:none;
+}
+
+
+DIV#RequestDataSet-mainDiv DIV.outputOptionsLbl {
+	padding: 6px 0px;
+	width:80px;
+	text-align:right;
+	float: left;
+	font-weight:bold;
+	color:#666;
+	margin: 15px 10px 0px 0px;
+}
+DIV#RequestDataSet-mainDiv DIV.outputOptions {
+	padding: 5px 10px;
+	margin-top: 15px;
+	text-align:center;
+	border: 1px solid #63758C;
+	width:300px;
+	overflow:hidden; 
+}
+DIV#RequestDataSet-mainDiv DIV.outputOptions form {
+	margin:0;
+	padding:0;
+}
+DIV#RequestDataSet-mainDiv DIV.outputOptions span {
+	margin-right: 15px;
+}
+
+DIV.tab-body{
+  margin-left: auto;
+  margin-right: auto;
+  background: #FFF;
+  padding: 15px;
+  font: 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #888;
+  text-shadow: 1px 1px 1px #FFF;
+  border:1px solid black;
+}
+
+DIV#anaPluginViewFrame.USETABS .yui-navset .yui-content{
+	padding:0 0 0 0;
+	border:none;
+}
+
+/**
+ * Tooltip Styles
+ */
+
+/* Add this attribute to the element that needs a tooltip */
+[data-tooltip] {
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+/* Hide the tooltip content by default */
+[data-tooltip]:before,
+[data-tooltip]:after {
+  visibility: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dateRangeConstraint {
+	color: #5391CE;
+}
+
+.valueConstraint {
+	color: #5391CE;
+}
+
+/* Position tooltip above the element */
+[data-tooltip]:before {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-bottom: 5px;
+  margin-left: -80px;
+  padding: 7px;
+  width: 160px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  content: attr(data-tooltip);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.2;
+  text-shadow: none;
+}
+
+/* Triangle hack to make tooltip look like a speech bubble */
+[data-tooltip]:after {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -5px;
+  width: 0;
+  border-top: 5px solid #000;
+  border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  content: " ";
+  font-size: 0;
+  line-height: 0;
+}
+
+/* Show tooltip content on hover */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+
