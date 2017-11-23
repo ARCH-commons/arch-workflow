@@ -1,6 +1,0 @@
-# Simple Dockerfile that adds ARCH patient_sets directory, bash shell to i2b2 server
-FROM ihlchip/i2b2-1-7
-
-RUN mkdir -p /opt/arch/patient_sets \
-	&& chmod 0777 /opt/arch/patient_sets \
-	&& apk add --no-cache bash
