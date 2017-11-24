@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<body>
+		<div id='ARCHRequestHandler-mainDiv'>
+			<div id="ARCHRequestHandler-TABS" class="yui-navset">
+			
+				<ul class="yui-nav">
+				  <li id="ARCHRequestHandler-TAB1" class="selected"><a href="#ARCHRequestHandler-TAB1"><em>Retrieve Requests</em></a></li>
+				  <li id="ARCHRequestHandler-TAB2"><a href="#ARCHRequestHandler-TAB2"><em>Specify Data</em></a></li>
+				  <li id="ARCHRequestHandler-TAB3"><a href="#ARCHRequestHandler-TAB3"><em>Preview Data</em></a></li>
+					<li id="ARCHRequestHandler-TAB4"><a href="#ARCHRequestHandler-TAB4"><em>Download Data</em></a></li>
+				  <li id="ARCHRequestHandler-TAB5"><a href="#ARCHRequestHandler-TAB5"><em>Upload to ARCH workspace</em></a></li>
+				  <li id="ARCHRequestHandler-TAB6"><a href="#ARCHRequestHandler-TAB6"><em>History</em></a></li>
+				</ul>
+				<div class="yui-content" id="ARCHRequestHandler-CONTENT">
+
+					<!-- Get desired SHRINE query -->
+					<div class="tab-body">
+						<div class="ARCHRequestHandler-MainContent">
+							<h1 style="padding-bottom:10px;"><img src="js-i2b2/cells/plugins/community/ARCHRequestHandler/assets/scilhs_32x32.png" data-tooltip="ARCH Logo" align="absbottom"/> ARCH Data Set Handler</h1>
+							<div class="ARCHRequestHandler-MainContentPad">
+								This plugin fulfills ARCH data set requests (initiated from the ARCH SHRINE client) by creating a table-based CSV file with aggregated patient data for a list of patients - one row per patient.</span>
+							</div>
+
+							<div style="text-align:left"><span style="font-size:22px;">Step 1: Extract Patient Set from SHRINE Query</span><br/>
+								<img src="js-i2b2/cells/plugins/community/ARCHRequestHandler/assets/step1.png" />
+								<br/><br/><strong>Purpose:</strong> This step allows you to generate an i2b2 patient set from a SHRINE query. Search the list of SHRINE queries below for the flagged/specified query to create a patient set from. Clicking on the query name will automatically prepare you to run the query locally.</div><br/>
+							<strong>Search:</strong><br/>
+							By Query Name [Contains]: <input type="text" id="ArchShrineAdmin-matchStr" value="" />&nbsp;&nbsp;&nbsp;By User Id: <input type="text" id="ArchShrineAdmin-userId" value="" />&nbsp;&nbsp;&nbsp;
+							# of Results:
+							<select id="ArchShrineAdmin-maxRecords" style="width:50px;">
+								<option value="10">10</option>
+								<option value="25" selected="selected">25</option>
+								<option value="50">50</option>
+								<option value="100">100</option>
+							</select>
+							<input id="ArchShrineAdmin-onlyflagged" type="checkbox" checked="checked"/> Show Only Flagged Queries <input type="submit" value="Search" onclick="javascript:i2b2.ARCH.ShrineConnector.ShrineSearch();return false;"/> <span id="ArchShrineAdmin-loading">Loading...</span>
+							<br/><br/>
+							<strong>Results:</strong><br/>
+							<div id="ArchShrineAdmin-results">
+							</div>
+
+							<div style="margin-top:15px;text-align:right;width:98%">
+								<input id="ARCHRequestHandler-templateBtn" disabled onclick="i2b2.ARCHRequestHandler.Downloader.showRequestTemplate();" type="button" class="ARCHRequestHandler-button" value="Next ( Show Request )" /><br/><br/><br/>
+							</div>
+
+						</div>
+					</div>
+					<!-- Create Data File -->
+					<div class="tab-body">
+						<div class="ARCHRequestHandler-MainContent">
+							<h1 style="padding-bottom:10px;"><img src="js-i2b2/cells/plugins/community/ARCHRequestHandler/assets/scilhs_32x32.png" align="absbottom"/> SCILHS Data Set Handler</h1>
+							<div class="ARCHRequestHandler-MainContentPad">
+								Review the data request template below:
+							</div>
+							<div id="ARCHRequestHandler-querySummary"></div>
+							<div id="ARCHRequestHandler-tableDefinition" style="display: none;">
+								<div><big>Selected ARCH SHRINE Query:</big></div>
+								<!--<div class="inputlbl">SCILHS ontology root:</div>-->
+								<!--<div><big>\\</big><input id="ARCHRequestHandler-prefixText" type="text" size="20" maxlength="30" /><big>\\</big> </div>-->
+								<div id="ARCHRequestHandler-flagDropArea">
+									<div class="droptrgtlbl">Flagged query:</div>
+									<div class="droptrgt SDX-PRS" id="ARCHRequestHandler-PRSDROP"><img src="js-i2b2/cells/plugins/community/ARCHRequestHandler/assets/pointer.png" align="absbottom" style="margin-left:5px;" /> Please Drag &amp; Drop your desired <em>Flagged Query</em> with a Patient Set here</div>
+									<div style="padding-left: 105px;"><label><input id="ARCHRequestHandler-LoadConcepts" type="checkbox" checked="checked">Include concepts from the Previous Query</label> <a href='#' onclick='return false;' data-tooltip='When this option is checked, concepts found in the selected query will be automatically loaded below.'><img style='margin-bottom:-3px;' src='js-i2b2/cells/plugins/community/ARCHRequestHandler/assets/tooltip.png'/></a></div>
+
+									<!--<div class="ARCHRequestHandler-MainContentPad"><strong>-&#45;&#45; OR -&#45;&#45;</strong></div>-->
+									<!--<div class=""><strong>Copy the raw request in the text area below and click 'Generate' to bring up the template:</strong></div>-->
+									<textarea id="ARCHRequestHandler-tableDefinitionText" rows="10" style="display: none;"></textarea>
+								</div>
+								<div><input type="button" class="ARCHRequestHandler-button" value="Generate" style="display: none;" onclick="i2b2.ARCHRequestHandler.loadTableDefinition();"/></div>
+							</div>
+							<div id="ARCHRequestHandler-conceptTableArea" style="display: none;">
+								<div id="ARCHRequestHandler-CONCEPTS">
+								</div>
+								<div id="ARCHRequestHandler-PreviewButton" style="margin-top:15px;text-align:right;width:98%">
+									<!--<input onclick="i2b2.ARCHRequestHandler.switchToTableDefinition();" type="button" class="ARCHRequestHandler-button" value="Back to Query" style="float:left">-->
+									<input onclick="i2b2.ARCHRequestHandler.processJob(1);" type="button" class="ARCHRequestHandler-button" value="Next ( Preview Data )" /><br/><br/><br/>
+								</div>
+								<!--							<div style="margin-top:15px;text-align:right;width:98%"><input onclick="i2b2.ARCHRequestHandler.newResults();" type="button" class="ARCHRequestHandler-button" value="Next ( Preview Data File )" /><br/><br/></div><br/>-->
+							</div>
+						</div>
+					</div>
+					
+				
+					<!-- ############### <Date Range Constraint Dialog> ############### -->
+					<div id="dateConstraintDialog" style="display:none;">
+						<div class="hd">Constrain by Date Range</div>
+						<div class="bd">
+							<br />
+							<center>
+								<table style="font-size:12px">
+									<tr><td>From:</td><td></td><td>To:</td></tr>
+									<tr>
+										<td class="dateBorder">
+											<table>
+												<tr>
+													<td valign="middle"><input id="PSV_CheckboxDateStart" type="checkbox" onchange="i2b2.ARCHRequestHandler.UI.DateConstraint.toggleDate()" /></td>
+													<td valign="middle"><input id="PSV_ConstraintDateStart" value="01/31/2008" style="width:75px;" disabled="disabled" /></td>
+													<td valign="middle"><a href="Javascript:i2b2.ARCHRequestHandler.UI.DateConstraint.doShowCalendar('S')"><img id="PSV_DropDateStart" style="position:relative; top:1px; border:none;" class="calendarDropdown" src="assets/images/b_dropdown.gif" alt="" /></a>&nbsp;</td>
+												</tr>
+											</table>
+										</td>
+										<td>&nbsp;&nbsp;&nbsp;</td>
+										<td class="dateBorder">
+											<table>
+												<tr>
+													<td valign="middle"><input id="PSV_CheckboxDateEnd" type="checkbox" onchange="i2b2.ARCHRequestHandler.UI.DateConstraint.toggleDate()" /></td>
+													<td valign="middle"><input id="PSV_ConstraintDateEnd" value="12/31/2008" style="width:75px;" disabled="disabled" /></td>
+													<td valign="middle"><a href="Javascript:i2b2.ARCHRequestHandler.UI.DateConstraint.doShowCalendar('E');"><img id="PSV_DropDateEnd" style="position:relative; top:1px" class="calendarDropdown" border="0" src="assets/images/b_dropdown.gif" alt="" /></a>&nbsp;</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</center>
+							<br /><br />
+						</div>
+					</div>
+					<!-- ############### </Date Range Constraint Dialog> ############### -->
+					<form style="display: hidden" action="js-i2b2/cells/plugins/community/ARCHRequestHandler/download.php" method="POST" id="downloadForm">
+						<input type="hidden" name="user_id" value=""/>
+						<input type="hidden" name="session" value=""/>
+						<input type="hidden" name="job_id" value=""/>
+						<input type="hidden" name="domain" value=""/>
+						<input type="hidden" name="pm_uri" value=""/>
+					</form>
+				</div>
+
+			
+			</div>
+
+		</div>
+	</body>
+</html>

@@ -1,0 +1,14 @@
+// This SHRINE configuration file is for local i2b2 installations only
+// to be used in conjunction with the SCILHS/ACT workflow plugin
+{
+        files: [
+                "i2b2_msgs.js"
+        ],
+        css: [],
+        config: {
+	//    name: "SHRINE Cell",
+	    //                description: "The SHRINE cell...",
+            //    category: ["core","cell","shrine"],
+                adminURL: "http://shrinepcoriappprod.dipr.partners.org:9092/shrine-pcori/rest/i2b2/admin/request"
+        }
+}
