@@ -10,8 +10,8 @@ $CONFIG = array(
         "id" => "91d231d4-1847-11e6-b6ba-3e1d05defe78", // test/development site
         "name" => "Testing/Development",
         "ssp_url" => "http://sspapi:8080/schils-ssp-api/",
-        "ssp_username" => "archplugin_test_site",
-        "ssp_password" => "qauser"
+//        "ssp_username" => "archplugin_test_site",
+//        "ssp_password" => "qauser"
     )
 );
 

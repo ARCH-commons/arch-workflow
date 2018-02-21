@@ -613,9 +613,15 @@ i2b2.PatientSetViewer.submitToArch = function (job_id) {
     //jQuery('#PatientSetViewer-ArchSubmissionDiv').hide();
     jQuery('#PatientSetViewer-ArchSubmissionStatus').removeClass('ui-state-error').removeClass('ui-state-highlight').show();
 
+    // get user params
+	var archUserId = jQuery('#PatientSetViewer-ArchPortalUserIdInput').val();
+    var archUserPassword = jQuery('#PatientSetViewer-ArchPortalPasswordInput').val();
 	jQuery.ajax({
 		url: "js-i2b2/cells/plugins/ARCH/PatientSetViewer/arch-portal.php",
 		method: "POST",
+		beforeSend: function(xhr) {
+            xhr.setRequestHeader ("Authorization", "Basic " + btoa(archUserId + ":" + archUserPassword));
+		},
 		dataType: "text",
 		data: {
 			api: "lds",
@@ -1181,6 +1187,19 @@ i2b2.PatientSetViewer._getJobStatus = function (job_id) {
                 $('PatientSetViewer-ArchSubmissionDiv').show();
                 $('PatientSetViewer-DownloadButtonDiv').innerHTML = "<a class=\"PatientSetViewer-button\" href=\"#\" onclick=\"javascript:i2b2.PatientSetViewer.downloadJob('" + job_id + "');return false;\">Download File</a>";
                 $('PatientSetViewer-DownloadButtonDiv').show();
+			}
+			else if (job.status = 'FAILED') {
+                i2b2.PatientSetViewer.model.previewLocked = false;
+                jQuery.alert({
+                    boxWidth: '300px',
+                    useBootstrap: false,
+                    type: 'red',
+                    title: 'Error processing data file',
+                    content: 'There was an error preparing the last data file.  Please check the status message and contact your system administrator'
+                });
+                $('PatientSetViewer-StatusView').innerHTML(job.payload);
+
+
 			}
 
 

@@ -25,6 +25,8 @@ try {
     }
 
     $api = $_POST['api'];
+    $portalUser = $_SERVER['PHP_AUTH_USER'];
+    $portalPassword = $_SERVER['PHP_AUTH_PW'];
 
     switch ($api) {
         case 'mysite':
@@ -70,7 +72,8 @@ try {
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($ch, CURLOPT_USERPWD, $CONFIG['ssp_username'] . ':' . $CONFIG['ssp_password']);
+//        curl_setopt($ch, CURLOPT_USERPWD, $CONFIG['ssp_username'] . ':' . $CONFIG['ssp_password']);
+        curl_setopt($ch, CURLOPT_USERPWD, $portalUser . ':' . $portalPassword);
         $result = curl_exec($ch);
         curl_close($ch);
         header('Content-Type: application/json');
@@ -80,12 +83,6 @@ try {
         $data_file = join(DIRECTORY_SEPARATOR, array($upload_dir, 'csv_' . $_POST['job_id'] . '.csv'));
 //        echo "Made it here!";
         $data_file_size = filesize($data_file);
-//    $ini_val = ini_get('upload_tmp_dir');
-//    $upload_tmp_dir = $ini_val ? $ini_val : sys_get_temp_dir();
-//    $data_file = $upload_tmp_dir . '/' . $_FILES['data_file']['name'];
-//    $data_file_size = $_FILES['data_file']['size'];
-//    move_uploaded_file($_FILES['data_file']['tmp_name'], $data_file);
-        //echo $data_file;
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
@@ -94,9 +91,6 @@ try {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         curl_setopt($ch, CURLOPT_USERPWD, $CONFIG['site_info']['ssp_username'] . ':' . $CONFIG['site_info']['ssp_password']);
-//        $postData = array(
-//            'uploadedFile' => "@$data_file"
-//        );
         $postData = array();
         $postData['uploadedFile'] = new CURLFile($data_file, 'text/csv');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);

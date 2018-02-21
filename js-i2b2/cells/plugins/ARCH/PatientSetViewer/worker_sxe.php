@@ -1,7 +1,8 @@
 <?php
-// worker_sxe.php
-// Biobank Portal Download Worker using SimpleXML Elements
-// v.1.0: April 4, 2016 - Nich Wattanasin
+// worker_sxe.php - ARCH portal download worker
+// (Modified from original Biobank Portal Download Worker using SimpleXML Elements)
+// v.1.0 (ARCH): December 2017 - Stanley Boykin
+// v.1.0 (Original): April 4, 2016 - Nich Wattanasin
 
 include_once('config.php');
 
@@ -24,14 +25,14 @@ $xml = <<<XML
 			<application_version>1.6</application_version>
 		</sending_application>
 		<sending_facility>
-			<facility_name>PHS</facility_name>
+			<facility_name>ARCH-Local-Site</facility_name>
 		</sending_facility>
 		<receiving_application>
 			<application_name>i2b2_DataRepositoryCell</application_name>
 			<application_version>1.6</application_version>
 		</receiving_application>
 		<receiving_facility>
-			<facility_name>PHS</facility_name>
+			<facility_name>ARCH-Local-Site</facility_name>
 		</receiving_facility>
 		<message_type>
 			<message_code>Q04</message_code>
@@ -139,6 +140,7 @@ function calculate_median($arr) {
 
 function calculate_average($arr) {
     $count = count($arr); //total numbers in array
+	$total = 0;
     foreach ($arr as $value) {
         $total = $total + $value; // total value of array numbers
     }
@@ -863,217 +865,213 @@ function arrayUnique($array, $preserveKeys = false) {
 }  
 
 // Start Processing
-
-if(count($argv) > 1){
-	$job_id = $argv[1];
-	$preview = $argv[2];
-}
-
-$logging = true; // for debug purposes
-//$logging = false; // for debug purposes
-//$domain = 'phsshrineact';
-//$crc_uri = 'http://i2b2act.dipr.partners.org:9090/i2b2/services/QueryToolService/pdorequest';
-
-$data = _getJob($job_id);
-$domain = $data->domain;
-$crc_uri = $data->crc_uri . 'pdorequest';
-$userid = $data->userid;
-$project = $data->project;
-$login_password = $data->login_password;
-if(property_exists($data, 'rerun_userid') && property_exists($data, 'rerun_login_password')){
-	$userid = $data->rerun_userid;
-	$login_password = $data->rerun_login_password;
-}
-//check if rerun_userid and rerun_login_password exist
-$patient_set_size = $data->patient_set_size;
-$patient_set_coll_id = $data->patient_set_coll_id;
-$filterlist = $data->filterlist;
-
-$observation_set = '<observation_set blob="false" onlykeys="false"/>';
-
-if(empty($filterlist)){
-	$observation_set = '';
-}
-
-$page_size = 50;
-
-$payload = "";
-
-$event_type = "Download_" . $data->event_type_id . "_" . (($preview)?"PR":"DL") . "_" . $data->patient_set_size . "_" . $data->query_master_id;
-
-$hasConcepts = false;
-
-if(sizeof($data->model->concepts) > 0){
-	$hasConcepts = true;
-}
-
-if($preview > 0){
-  _updateJobStatus($job_id, 'NEW', 'Processing page ' . $preview);
-  $cached_payload = $CONFIG['jobs_directory'] . '/' . $job_id . '.' . $preview; // job_id.page_num
-  if(file_exists($cached_payload)){
-    $payload = file_get_contents($cached_payload);
-  } else {
-    //    _updateJobStatus($job_id, 'NEW', 'Processing page ' . $preview);
-
-    $page = $preview - 1;
-    $request_xml = _XML_getPDO_fromInputList(1+($page_size*$page),$page_size+($page_size*$page), $event_type);
-    //    $request_xml = _XML_getPDO_fromInputList(1,25, $event_type);
-    $response_xml = _postXML($request_xml);
-    $doc = simplexml_load_string($response_xml);
-		
-    $query = '//patient';
-    $result = $doc->xpath($query);
-    
-    foreach($result as $patient){
-      
-      $patient_id = $patient->patient_id;
-      
-      $payload .= _outputRequiredFields_forPatient($patient_id);
-      if($hasConcepts){
-	$payload .= ',';
-	$payload .= _outputConcepts_forPatient($patient_id);
-      }
-      $payload .= "\r\n";
-    }
-	
-    $payload = rtrim($payload, "\r\n");
-    $payload = formatter_CSV_to_HTML($payload);
-
-    // Cache Payload
-    $savepage = fopen($CONFIG['jobs_directory'] . '/' . $job_id . '.' . $preview, "w"); // job_file.page_num
-    fwrite($savepage, $payload);
-    fclose($savepage);
-  }
-
-	// Uncomment to debug preview
-	//$payloadfile = fopen('jobs/preview_' . $job_id . '.html', "w");
-	//fwrite($payloadfile, $payload);
-	//fclose($payloadfile);
-	
-  _updateJobStatus($job_id, 'PREVIEW', $payload);
-	
-} else {
-	_updateJobStatus($job_id, 'PROCESSING', '0 of '.$patient_set_size.' patients');
-
-	$pages = 1;
-	if($patient_set_size > $page_size){
-		$pages = ceil($patient_set_size / $page_size);
+$job_id = "not set";
+try {
+	if(count($argv) > 1){
+		$job_id = $argv[1];
+		$preview = $argv[2];
 	}
-	
-	for($page=0;$page<$pages;$page++){
-		$data = _getJob($job_id);
-		$status = $data->status;
-		if($status == 'PROCESSING'){
-			$request_xml = _XML_getPDO_fromInputList(1+($page_size*$page),$page_size+($page_size*$page), $event_type);
-			$response_xml = _postXML($request_xml);
-			
-			
-			// check $response_xml for existence of paging
-			// 
-			//$doc = simplexml_load_string($response_xml, 'SimpleXMLElement', LIBXML_PARSEHUGE);
-			
-			$doc = simplexml_load_file($CONFIG['jobs_directory'] . '/' . "response_".$job_id.".xml", 'SimpleXMLElement', LIBXML_PARSEHUGE);
+	if ($job_id == "not set") {
+		throw new RuntimeException("No job id found in input parameters");
+	}
+	$logging = true; // for debug purposes
+	//$logging = false; // for debug purposes
+	//$domain = 'phsshrineact';
+	//$crc_uri = 'http://i2b2act.dipr.partners.org:9090/i2b2/services/QueryToolService/pdorequest';
 
-			$page_query = '//patients_returned_first';
-			$page_result = $doc->xpath($page_query);
-			
+	$data = _getJob($job_id);
+	$domain = $data->domain;
+	$crc_uri = $data->crc_uri . 'pdorequest';
+	$userid = $data->userid;
+	$project = $data->project;
+	$login_password = $data->login_password;
+	if(property_exists($data, 'rerun_userid') && property_exists($data, 'rerun_login_password')){
+		$userid = $data->rerun_userid;
+		$login_password = $data->rerun_login_password;
+	}
+	//check if rerun_userid and rerun_login_password exist
+	$patient_set_size = $data->patient_set_size;
+	$patient_set_coll_id = $data->patient_set_coll_id;
+	$filterlist = $data->filterlist;
+
+	$observation_set = '<observation_set blob="false" onlykeys="false"/>';
+
+	if(empty($filterlist)){
+		$observation_set = '';
+	}
+
+	$page_size = 50;
+
+	$payload = "";
+
+	$event_type = "Download_" . $data->event_type_id . "_" . (($preview)?"PR":"DL") . "_" . $data->patient_set_size . "_" . $data->query_master_id;
+
+	$hasConcepts = false;
+
+	if(sizeof($data->model->concepts) > 0){
+		$hasConcepts = true;
+	}
+
+	if($preview > 0){
+	  _updateJobStatus($job_id, 'NEW', 'Processing page ' . $preview);
+	  $cached_payload = $CONFIG['jobs_directory'] . '/' . $job_id . '.' . $preview; // job_id.page_num
+	  if(file_exists($cached_payload)){
+		$payload = file_get_contents($cached_payload);
+	  } else {
+		//    _updateJobStatus($job_id, 'NEW', 'Processing page ' . $preview);
+
+		$page = $preview - 1;
+		$request_xml = _XML_getPDO_fromInputList(1+($page_size*$page),$page_size+($page_size*$page), $event_type);
+		//    $request_xml = _XML_getPDO_fromInputList(1,25, $event_type);
+		$response_xml = _postXML($request_xml);
+		$doc = simplexml_load_string($response_xml);
+
+		if ($doc) {
 			$query = '//patient';
 			$result = $doc->xpath($query);
 
-			if($page == 0){
-				$payload .= _outputRequiredFields_header();
-				$payload .= ',';
-				$payload .= _outputConcepts_header() . "\r\n";
-			}
-			foreach($result as $patient){
-			
+			foreach ($result as $patient) {
+
 				$patient_id = $patient->patient_id;
-				
+
 				$payload .= _outputRequiredFields_forPatient($patient_id);
-				$payload .= ',';
-				$payload .= _outputConcepts_forPatient($patient_id);
+				if ($hasConcepts) {
+					$payload .= ',';
+					$payload .= _outputConcepts_forPatient($patient_id);
+				}
 				$payload .= "\r\n";
-			}		
-			//handle paging
-			if(!empty($page_result)){
-				$patients_requested_from = 1+($page_size*$page);		// 51
-				$patients_requested_to = $page_size+($page_size*$page);	// 100	
-				$patients_returned_to = $page_result[0]['last_index'];	// 68
-				//get attributes
-				
-				for($single_patient=$patients_returned_to+1;$single_patient<=$patients_requested_to;$single_patient++){ //69 to 100
-					$data = _getJob($job_id);
-					$status = $data->status;
-					if($status == 'PROCESSING'){
-						$request_xml = _XML_getPDO_fromInputList($single_patient,$single_patient, $event_type);
-						$response_xml = _postXML($request_xml);
-						
-						$doc = simplexml_load_file($CONFIG['jobs_directory'] . '/' . "response_".$job_id.".xml", 'SimpleXMLElement', LIBXML_PARSEHUGE);
-						
-						$query = '//patient';
-						$result = $doc->xpath($query);
-
-						if($page == 0){
-							$payload .= _outputRequiredFields_header();
-							$payload .= ',';
-							$payload .= _outputConcepts_header() . "\r\n";
-						}
-						foreach($result as $patient){
-						
-							$patient_id = $patient->patient_id;
-							
-							$payload .= _outputRequiredFields_forPatient($patient_id);
-							$payload .= ',';
-							$payload .= _outputConcepts_forPatient($patient_id);
-							$payload .= "\r\n";
-						}	
-						
-						$data = _getJob($job_id);
-						$status = $data->status;
-						if($status == 'PROCESSING'){ // check if job was cancelled mid-process
-							_updateJobStatus($job_id, 'PROCESSING', $single_patient . " of ".$patient_set_size . ' patients');
-						}
-					}
-					if($status == 'CANCELLED'){
-						exit();
-					}
-				}
-			} else {
-				$data = _getJob($job_id);
-				$status = $data->status;
-				if($status == 'PROCESSING'){ // check if job was cancelled mid-process
-					_updateJobStatus($job_id, 'PROCESSING', ($page_size*($page+1)) . " of ".$patient_set_size . ' patients');
-				}
 			}
-			
-		}
-		if($status == 'CANCELLED'){
-			exit();
-		}
 
-	}
-	$payload = rtrim($payload, "\r\n");
-	$payloadfile = fopen($CONFIG['jobs_directory'] . '/csv_' . $job_id . '.csv', "w");
-	fwrite($payloadfile, $payload);
-	fclose($payloadfile);
-	
-	_updateJobStatus($job_id, 'FINISHED', 'Download is Ready');
+			$payload = rtrim($payload, "\r\n");
+			$payload = formatter_CSV_to_HTML($payload);
+
+			// Cache Payload
+			$savepage = fopen($CONFIG['jobs_directory'] . '/' . $job_id . '.' . $preview, "w"); // job_file.page_num
+			fwrite($savepage, $payload);
+			fclose($savepage);
+		}
+	  }
+
+
+		// Uncomment to debug preview
+		//$payloadfile = fopen('jobs/preview_' . $job_id . '.html', "w");
+		//fwrite($payloadfile, $payload);
+		//fclose($payloadfile);
+
+	  _updateJobStatus($job_id, 'PREVIEW', $payload);
+
+	} else {
+        _updateJobStatus($job_id, 'PROCESSING', '0 of ' . $patient_set_size . ' patients');
+
+        $pages = 1;
+        if ($patient_set_size > $page_size) {
+            $pages = ceil($patient_set_size / $page_size);
+        }
+
+        for ($page = 0; $page < $pages; $page++) {
+            $data = _getJob($job_id);
+            $status = $data->status;
+            if ($status == 'PROCESSING') {
+                $request_xml = _XML_getPDO_fromInputList(1 + ($page_size * $page), $page_size + ($page_size * $page), $event_type);
+                $response_xml = _postXML($request_xml);
+
+
+                // check $response_xml for existence of paging
+                //
+                //$doc = simplexml_load_string($response_xml, 'SimpleXMLElement', LIBXML_PARSEHUGE);
+
+                $doc = simplexml_load_file($CONFIG['jobs_directory'] . '/' . "response_" . $job_id . ".xml", 'SimpleXMLElement', LIBXML_PARSEHUGE);
+
+                $page_query = '//patients_returned_first';
+                $page_result = $doc->xpath($page_query);
+
+                $query = '//patient';
+                $result = $doc->xpath($query);
+
+                if ($page == 0) {
+                    $payload .= _outputRequiredFields_header();
+                    $payload .= ',';
+                    $payload .= _outputConcepts_header() . "\r\n";
+                }
+                foreach ($result as $patient) {
+
+                    $patient_id = $patient->patient_id;
+
+                    $payload .= _outputRequiredFields_forPatient($patient_id);
+                    $payload .= ',';
+                    $payload .= _outputConcepts_forPatient($patient_id);
+                    $payload .= "\r\n";
+                }
+                //handle paging
+                if (!empty($page_result)) {
+                    $patients_requested_from = 1 + ($page_size * $page);        // 51
+                    $patients_requested_to = $page_size + ($page_size * $page);    // 100
+                    $patients_returned_to = $page_result[0]['last_index'];    // 68
+                    //get attributes
+
+                    for ($single_patient = $patients_returned_to + 1; $single_patient <= $patients_requested_to; $single_patient++) { //69 to 100
+                        $data = _getJob($job_id);
+                        $status = $data->status;
+                        if ($status == 'PROCESSING') {
+                            $request_xml = _XML_getPDO_fromInputList($single_patient, $single_patient, $event_type);
+                            $response_xml = _postXML($request_xml);
+
+                            $doc = simplexml_load_file($CONFIG['jobs_directory'] . '/' . "response_" . $job_id . ".xml", 'SimpleXMLElement', LIBXML_PARSEHUGE);
+
+                            $query = '//patient';
+                            $result = $doc->xpath($query);
+
+                            if ($page == 0) {
+                                $payload .= _outputRequiredFields_header();
+                                $payload .= ',';
+                                $payload .= _outputConcepts_header() . "\r\n";
+                            }
+                            foreach ($result as $patient) {
+
+                                $patient_id = $patient->patient_id;
+
+                                $payload .= _outputRequiredFields_forPatient($patient_id);
+                                $payload .= ',';
+                                $payload .= _outputConcepts_forPatient($patient_id);
+                                $payload .= "\r\n";
+                            }
+
+                            $data = _getJob($job_id);
+                            $status = $data->status;
+                            if ($status == 'PROCESSING') { // check if job was cancelled mid-process
+                                _updateJobStatus($job_id, 'PROCESSING', $single_patient . " of " . $patient_set_size . ' patients');
+                            }
+                        }
+                        if ($status == 'CANCELLED') {
+                            exit();
+                        }
+                    }
+                } else {
+                    $data = _getJob($job_id);
+                    $status = $data->status;
+                    if ($status == 'PROCESSING') { // check if job was cancelled mid-process
+                        _updateJobStatus($job_id, 'PROCESSING', ($page_size * ($page + 1)) . " of " . $patient_set_size . ' patients');
+                    }
+                }
+
+            }
+            if ($status == 'CANCELLED') {
+                exit();
+            }
+
+        }
+        $payload = rtrim($payload, "\r\n");
+        $payloadfile = fopen($CONFIG['jobs_directory'] . '/csv_' . $job_id . '.csv', "w");
+        fwrite($payloadfile, $payload);
+        fclose($payloadfile);
+
+        _updateJobStatus($job_id, 'FINISHED', 'Download is Ready');
+    }
+} catch (Exception $e) {
+	echo 'An exception occurred in preparing data file for job: (' . $job_id . '): ' . $e->getTraceAsString();
+	_updateJobStatus($job_id, 'FAILED', $e->getMessage());
+
 }
-
-
-
-	
-	
-	//$data = _parsePDOResponse($response);
-	
-	
-	//parse response
-
-	//_finishJob($job_id, 'DONE', $response);
-	
-
-	
-	//_finishJob($job_id, 'DONE', 'it works');
 
 
 	

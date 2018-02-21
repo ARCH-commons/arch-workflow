@@ -18,7 +18,7 @@
 						<div class="ShrineConnector-MainContentPad" style="padding:15px;">
 							<div style="float:left;left:400px;top:28px;position:absolute;font-size:14px;">View and Refine seARCH Data Requests</div>
 							<h1 style="padding-bottom:10px;"><img src="js-i2b2/cells/plugins/ARCH/PatientSetViewer/assets/arch-logo.png" style="border: 0;" alt="Query Search" width="64px" height="32px" align="absbottom">seARCH Data Request Handler</h1>
-							<div style='padding: 10px; border-radius: 10px; border: 1px solid rgb(86, 158, 231); color: rgb(86, 158, 231); background: rgb(236, 251, 255);'><img style='margin-top:2px;margin-bottom:2px;' src='js-i2b2/cells/ONT/assets/info_icon.png' align='absmiddle'>
+							<div style='padding: 10px; border-radius: 10px; border: 1px solid rgb(86, 158, 231); color: rgb(86, 158, 231); background: rgb(236, 251, 255);'><!-- <img style='margin-top:2px;margin-bottom:2px;' src='js-i2b2/cells/ONT/assets/info_icon.png' align='absmiddle'> -->
 								<p>
 									To begin, choose a query from the search results below and click 'Run' to generate a patient set locally.  Once completed, click the 'Select' button to proceed.
 								</p>
@@ -124,25 +124,40 @@
                         <h1>Upload Data Set to ARCH</h1><br/>
                         <div id="no-results-section-file" class="results">You must first <strong>Preview Data File</strong> before you can proceed</div>
                         <div id="results-section-file" class="results">
-                            <div style='padding: 10px; border-radius: 10px; border: 1px solid rgb(86, 158, 231); color: rgb(86, 158, 231); background: rgb(236, 251, 255);'><img style='margin-top:2px;margin-bottom:2px;' src='js-i2b2/cells/ONT/assets/info_icon.png' align='absmiddle'>
+                            <div style='padding: 10px; border-radius: 10px; border: 1px solid rgb(86, 158, 231); color: rgb(86, 158, 231); background: rgb(236, 251, 255);'><!-- <img style='margin-top:2px;margin-bottom:2px;' src='js-i2b2/cells/ONT/assets/info_icon.png' align='absmiddle'> -->
 								<p>
 									Note: Once the processing starts below, you do not need to keep this screen or browser open. <b> [You will until I implement the History tab :)] </b>.
 									The current status and resulting download link will be available through the 'History' tab
 								</p>
 								<p>
-									Once the file has been prepared, click the submit button to send the file to the study's workspace in the ARCH Portal.  You may also download the prepared file.
+									Once the file has been prepared, enter your ARCH portal user credentials and click the submission button to send the file to the study's workspace in the ARCH Portal.
+									<b>You must be a registered user (with site uploader permissions) to submit a data set.</b>
+								</p>
+								<p>
+									You may also download the prepared file.
 								</p>
 							</div><br/>
                             <div id="PatientSetDownloader-ProcessTime" style="color:#888;padding:10px;font-size:11px;"></div>
                             <div id="PatientSetViewer-StatusView" style="font-size:16px;padding:10px;display:none;">
                                 <img src="js-i2b2/cells/plugins/community/PatientSetDownloader/assets/ajax.gif" align="absmiddle"/> Processed <span id="PatientSetDownloader-Processed" style="font-weight:bold;">0</span> of <span id="PatientSetDownloader-PatientSetSize" style="font-weight:bold;">0</span> patients...
                             </div>
-                            <div id="PatientSetViewer-ArchSubmissionDiv" style="font-size:16px;padding:10px;display:none;">
+                            <div id="PatientSetViewer-ArchSubmissionDiv" style="font-size:12px;padding:10px;display:none;">
                                     <!--<input type="hidden" name="user_id" value="" />-->
-									<div><label for="PatientSetViewer-ArchStudyNameInput">Data set prepared for the following ARCH Study: </label> <input type="input" readonly name="arch_name" id="PatientSetViewer-ArchStudyNameInput" value="(N/A)" /></div>
+								<div>
+									<label for="PatientSetViewer-ArchStudyNameInput">Data set prepared for the following ARCH Study: </label>
+									<input type="input" readonly name="arch_name" id="PatientSetViewer-ArchStudyNameInput" value="(N/A)" size="30" />
+								</div>
+								<div>
+									<label for="PatientSetViewer-ArchPortalUserIdInput">ARCH Portal username:</label>
+									<input type="input" name="arch_userId" id="PatientSetViewer-ArchPortalUserIdInput" size="30" />
+								</div>
+								<div>
+									<label for="PatientSetViewer-ArchPortalPasswordInput">Password:</label>
+									<input type="password" name="arch_password" id="PatientSetViewer-ArchPortalPasswordInput" size="30" />
+								</div>
                                     <!--<input type="hidden" name="arch_id" value="" />-->
                                     <!--<input type="hidden" name="job_id" value="" />-->
-                                    <div id="PatientSetViewer-ArchSubmissionButtonDiv" style="padding:10px;"></div>
+                                <div id="PatientSetViewer-ArchSubmissionButtonDiv" style="padding:10px;"></div>
                             </div>
 							<div id="PatientSetViewer-DownloadButtonDiv" style="padding:10px; display:none;"></div>
 							<div id="PatientSetViewer-ArchSubmissionStatus" style="display:none;"></div>
