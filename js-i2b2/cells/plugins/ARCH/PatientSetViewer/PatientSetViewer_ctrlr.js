@@ -635,10 +635,6 @@ i2b2.PatientSetViewer.submitToArch = function (job_id) {
         jQuery('#PatientSetViewer-ArchSubmissionStatus').addClass('ui-state-error');
         jQuery('#PatientSetViewer-ArchSubmissionStatus').html("An error occurred during submission");
 	});
-    // jQuery('#archUploadForm [name="arch_id"]').val(i2b2.PatientSetViewer.ShrineConnector.model.selectedQuery.flagObject.dataRequest.tags.archStudyId);
-    // jQuery('#archUploadForm [name="job_id"]').val(job_id);
-    //
-    // jQuery('#archUploadForm').submit();
 
 }
 
@@ -2349,6 +2345,7 @@ i2b2.PatientSetViewer.prsDropped = function (sdxData) {
 
 /** initialize the concepts viewing tab **/
 i2b2.PatientSetViewer.initializeViewingTab = function() {
+    var tagStudyName = "[Unspecified Study Name]";
 	if (!i2b2.PatientSetViewer.ShrineConnector.model.selectedQuery) {
 		alert("ERROR (NO SELECTED REQUEST): Please select a data set query from the previous tab.");
 		return;
@@ -2371,6 +2368,12 @@ i2b2.PatientSetViewer.initializeViewingTab = function() {
 	}
 	// fill the template table
     var flagRequestObject = i2b2.PatientSetViewer.ShrineConnector.model.selectedQuery.flagObject.dataRequest;
+    var tagStudyName = "[Unspecified Study Name]";
+    if (flagRequestObject && flagRequestObject.tags
+		&& flagRequestObject.tags.archStudyName) {
+        tagStudyName = flagRequestObject.tags.archStudyName;
+	}
+    jQuery("#PatientSetHandler-ShrineQueryLabelBig").html(tagStudyName);
 	i2b2.PatientSetViewer.loadTemplateTable(flagRequestObject);
 
     // i2b2.PatientSetViewer.loadQueryConcepts(psqInfo.localId);

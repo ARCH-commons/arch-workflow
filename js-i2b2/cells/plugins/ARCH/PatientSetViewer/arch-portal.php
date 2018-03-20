@@ -8,14 +8,8 @@
 require_once('config.php');
 
 try {
-
     if (!isset($_POST['api'])) {
-        throw new RuntimeException('ARCH Site id not set.  Contact ARCH development team to get ARCH site ID.');
-//        echo 'No API specified';
-//        die();
-    }
-    if (!isset($CONFIG['site_info']['id'])) {
-        throw new RuntimeException('ARCH Site id not set.  Contact ARCH development team to get ARCH site ID.');
+        throw new RuntimeException('ARCH API type not set.  Contact ARCH development team as this is an internal error.');
     }
     if (!isset($CONFIG['jobs_directory'])) {
         throw new RuntimeException('Jobs directory not set.');
@@ -58,9 +52,7 @@ try {
         case 'lds':
             $action = 'POST';
             if (isset($_POST['arch_id']) && !empty($_POST['arch_id'])) {
-                if (isset($CONFIG['site_info']['id']) && !empty($CONFIG['site_info']['id'])) {
-                    $endpoint = $CONFIG['site_info']['ssp_url'] . 'api/lds/' . $_POST['arch_id'] . '/' . $CONFIG['site_info']['id'];
-                }
+                    $endpoint = $CONFIG['site_info']['ssp_url'] . 'api/lds/' . $_POST['arch_id'];
             }
             break;
 
@@ -72,7 +64,6 @@ try {
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-//        curl_setopt($ch, CURLOPT_USERPWD, $CONFIG['ssp_username'] . ':' . $CONFIG['ssp_password']);
         curl_setopt($ch, CURLOPT_USERPWD, $portalUser . ':' . $portalPassword);
         $result = curl_exec($ch);
         curl_close($ch);
@@ -81,25 +72,21 @@ try {
     } else if ($action == 'POST') {
         $upload_dir = $CONFIG['jobs_directory'];
         $data_file = join(DIRECTORY_SEPARATOR, array($upload_dir, 'csv_' . $_POST['job_id'] . '.csv'));
-//        echo "Made it here!";
         $data_file_size = filesize($data_file);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
-        //curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($ch, CURLOPT_USERPWD, $CONFIG['site_info']['ssp_username'] . ':' . $CONFIG['site_info']['ssp_password']);
+        curl_setopt($ch, CURLOPT_USERPWD, $portalUser . ':' . $portalPassword);
         $postData = array();
         $postData['uploadedFile'] = new CURLFile($data_file, 'text/csv');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-//        curl_setopt($ch, CURLOPT_INFILESIZE, $data_file_size);
         echo "Submitting the following data file to portal API: " . $data_file;
         $output = curl_exec($ch);
         $info = curl_getinfo($ch);
         if ($output == false || $info['http_code'] != 200) {
-            //header("Content-Type: text/plain");
             $resultText = 'Call to portal API [' . $endpoint . '] returned no data [' . $info['http_code'] . ']';
             if (curl_error($ch)) {
                 $resultText .= "\n" . curl_error($ch);
@@ -113,7 +100,7 @@ try {
         curl_close($ch);
     }
 } catch (Exception $e) {
-    echo 'Caught exception: ', $e->getMessage(), "\n";
+    error_log('arch-portal: ' . $e->getMessage());
     http_response_code(500);
 }
 ?>
