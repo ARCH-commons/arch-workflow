@@ -4,8 +4,9 @@
     files: [
         "i2b2_msgs.js"
     ],
-        css: [],
+    css: [],
     config: {
-        adminURL: "http://adapter1:6060/shrine/rest/i2b2/admin/request"
+        adminURL: "http://adapter1:6060/shrine/rest/i2b2/admin/request",
+        ontologyMappingType: "Demo" // NOTE: Set to 'PCORI' when using PCORI's ontology
     }
 }

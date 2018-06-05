@@ -38,7 +38,8 @@ jQuery(document).on("context_show.vakata", function (e, data) {
 
 i2b2.PatientSetViewer.ShrineConnector = {};
 i2b2.PatientSetViewer.ShrineMapping = {};
-i2b2.PatientSetViewer.ShrineMapping.ontologyToUse = "Demo";  // either 'Demo' or 'PCORI' for now
+//i2b2.PatientSetViewer.ShrineMapping.ontologyToUse = "Demo";  // either 'Demo' or 'PCORI' for now
+i2b2.PatientSetViewer.ShrineMapping.ontologyToUse = i2b2.SHRINE.cfg.config.ontologyMappingType;  // either 'Demo' or 'PCORI' - referenced from SHRINE configuration
 
 i2b2.PatientSetViewer.UI = {};
 
@@ -2400,6 +2401,7 @@ i2b2.PatientSetViewer.loadTemplateTable = function(requestObject) {
             var localKeys = i2b2.PatientSetViewer.ShrineMapping[i2b2.PatientSetViewer.ShrineMapping.ontologyToUse].getLocalMapping(shrineKey);
             var attachLocalDisplayName = false;
             if (!localKeys || localKeys.length < 1) {
+            	alert("WARNING: Skipping local i2b2 mapping for SHRINE concept (not found): " + shrineKey);
                 console.warn("No local mapping for SHRINE concept, skipping: " + shrineKey);
             } else {
             	// If more than one local key is found, attach local display keys for disambiguation
