@@ -51,30 +51,6 @@ i2b2.hive.tempCellsList = [
 			forceDir: "cells/plugins/ARCH"
 		},
 
-    // { code: "ARCHRequestHandler",
-    //     	forceLoading: true,
-    //     	forceConfigMsg: { params: [] },
-    //     	roles: [ "DATA_LDS", "DATA_DEID", "DATA_PROT", "MANAGER" ],
-    //     	forceDir: "cells/plugins/community"
-    // 	},
-	    { code: "PatientSetDownloader",
-		  forceLoading: true,
-		  forceConfigMsg: { params: [] },
-		  roles: [ "DATA_LDS", "DATA_DEID", "DATA_PROT" ],
-		  forceDir: "cells/plugins/community"
-        },
-    	// { code: "SCILHSRequestHandler",
-         //  forceLoading: true,
-         //  forceConfigMsg: { params: [] },
-         //  roles: [ "DATA_LDS", "DATA_DEID", "DATA_PROT" ],
-         //  forceDir: "cells/plugins/community"
-    	// },
-    	// { code: "ShrineConnector",
-        	// forceLoading: true,
-        	// forceConfigMsg: { params: [] },
-        	// roles: [ "DATA_LDS", "DATA_DEID", "DATA_PROT", "MANAGER" ],
-    	//     forceDir: "cells/plugins/community"
-	    // },
 		{ code:	"Dem1Set",
 		   forceLoading: true,
 		   forceConfigMsg: { params: [] },
@@ -92,24 +68,6 @@ i2b2.hive.tempCellsList = [
 		   forceConfigMsg: { params: [] },
 		   roles: [ "DATA_LDS", "DATA_DEID", "DATA_PROT" ],
 		   forceDir: "cells/plugins/standard"
-		},
-		{ code:	"WISEsearcher",
-		   forceLoading: true,
-		   forceConfigMsg: { params: [] },
-		   roles: [ "DATA_OBFSC", "DATA_LDS", "DATA_DEID", "DATA_PROT" ],
-		   forceDir: "cells/plugins/community"
-		},
-		{ code:	"CAREcncptDem",
-		   forceLoading: true,
-		   forceConfigMsg: { params: [] },
-		   roles: [ "DATA_LDS", "DATA_DEID", "DATA_PROT" ],
-		   forceDir: "cells/plugins/community"
-		},
-		{ code:	"CAREobsTally",
-		   forceLoading: true,
-		   forceConfigMsg: { params: [] },
-		   roles: [ "DATA_LDS", "DATA_DEID", "DATA_PROT" ],
-		   forceDir: "cells/plugins/community"
 		},
 		{ code:	"ExportXLS",
 		   forceLoading: true,

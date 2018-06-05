@@ -610,7 +610,7 @@ i2b2.PatientSetViewer.confirmSubmitToArch = function(job_id) {
 
 i2b2.PatientSetViewer.submitToArch = function (job_id) {
 
-	jQuery('#PatientSetViewer-ArchSubmissionStatus').html ="<img src='js-i2b2/cells/plugins/community/PatientSetDownloader/assets/ajax.gif' align='absmiddle'/> <span>Submitting data set to ARCH Portal.  <b>This will keep on spinnning until I hook this up to the API :)</b></span>";
+	jQuery('#PatientSetViewer-ArchSubmissionStatus').html ="<img src='js-i2b2/cells/plugins/ARCH/PatientSetViewer/assets/ajax.gif' align='absmiddle'/> <span>Submitting data set to ARCH Portal.  <b>This will keep on spinnning until I hook this up to the API :)</b></span>";
     //jQuery('#PatientSetViewer-ArchSubmissionDiv').hide();
     jQuery('#PatientSetViewer-ArchSubmissionStatus').removeClass('ui-state-error').removeClass('ui-state-highlight').show();
 

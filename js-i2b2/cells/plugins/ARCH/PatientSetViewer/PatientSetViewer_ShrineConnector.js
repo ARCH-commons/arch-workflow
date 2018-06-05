@@ -316,7 +316,7 @@ i2b2.PatientSetViewer.ShrineConnector.shrineLoadResults = function () {
 
 
     resultsHtml += "<tr class='header'>" +
-        "<th style='width:15px;border-top-style:none;padding:0px;'><img src=\"js-i2b2/cells/plugins/community/ARCHRequestHandler/assets/flagged.png\" alt=\"Flagged\" title=\"Flagged\" /></th>" +
+        "<th style='width:15px;border-top-style:none;padding:0px;'><img src=\"js-i2b2/cells/plugins/ARCH/PatientSetViewer/assets/flagged.png\" alt=\"Flagged\" title=\"Flagged\" /></th>" +
         "<th style='width:45px;border-top-style:none;'>Select</th>" +
         "<th style='width:60px;border-top-style:none;'>Created</th>" +
         "<th style='width:150px;border-top-style:none;'>Name</th>" +
@@ -355,7 +355,7 @@ i2b2.PatientSetViewer.ShrineConnector.shrineLoadResults = function () {
             var flag = "";
             var FlagCheckBoxChecked = '<input id="' + resultCounter + 'ArchShrineAdmin-onlyflagged" type="checkbox" disabled="disabled" checked="checked" title="Flagged Query" onclick="i2b2.PatientSetViewer.ShrineConnector.flagCheckboxClicked(' + resultCounter + ');"/>';
             var FlagCheckBoxUnChecked = '<input id="' + resultCounter + 'ArchShrineAdmin-onlyflagged" type="checkbox" disabled="disabled"  title="Unflagged Query" onclick="i2b2.PatientSetViewer.ShrineConnector.flagCheckboxClicked(' + resultCounter + ');"/>';
-            var flagIcon = "<img src=\"js-i2b2/cells/plugins/community/ARCHRequestHandler/assets/flagged.png\" alt=\"Flagged for Acton Needed\" title=\"Flagged for Acton Needed\"/>";
+            var flagIcon = "<img src=\"js-i2b2/cells/plugins/ARCH/PatientSetViewer/assets/flagged.png\" alt=\"Flagged for Acton Needed\" title=\"Flagged for Acton Needed\"/>";
 
             var showQuery = "javascript:i2b2.PatientSetViewer.ShrineConnector.shrineGetQuery('" + query.id + "');return false;";
             var runQuery = "javascript:i2b2.PatientSetViewer.ShrineConnector.shrineRunQuery('" + resultCounter + "','" + query.id + "','" + query.name + "','" + query.networkid + "')";
@@ -497,7 +497,7 @@ i2b2.PatientSetViewer.ShrineConnector.shrineRunQuery = function (ui_row_id, quer
 
 
     if (i2b2.PatientSetViewer.ShrineConnector.demoMode) {
-        document.getElementById(ui_row_id + 'EditTextSpan').innerHTML = '<img src="js-i2b2/cells/plugins/ACT/ShrineConnector/assets/ajaxicon.gif" align="absmiddle"/> Processing';
+        document.getElementById(ui_row_id + 'EditTextSpan').innerHTML = '<img src="js-i2b2/cells/plugins/ARCH/PatientSetViewer/assets/ajaxicon.gif" align="absmiddle"/> Processing';
         setTimeout(function () {
             document.getElementById(ui_row_id + 'EditTextSpan').innerHTML = "Query Created<br/><strong><a href=\"#\" onclick=\"$('ShrineConnector-TAB2').click();\">Proceed with this query &gt;</a></strong>";
         }, 5000);
