@@ -150,10 +150,11 @@ i2b2.ONT.ctrlr.FindBy = {
 			// display the results
 			var c = results.refXML.getElementsByTagName('concept');
 			totalCount = totalCount + c.length;
+			var oset = [];
 			for(var i2=0; i2<1*c.length; i2++) {
 				var o = new Object;
 				o.xmlOrig = c[i2];
-				o.name = i2b2.h.getXNodeVal(c[i2],'name');
+				o.name =  i2b2.h.getXNodeVal(c[i2],'name'); // Add level to name: '[' + i2b2.h.getXNodeVal(c[i2],'level') + '] ' + i2b2.h.getXNodeVal(c[i2],'name');
 				o.hasChildren = i2b2.h.getXNodeVal(c[i2],'visualattributes').substring(0,2);
 				o.level = i2b2.h.getXNodeVal(c[i2],'level');
 				o.key = i2b2.h.getXNodeVal(c[i2],'key');
@@ -164,6 +165,27 @@ i2b2.ONT.ctrlr.FindBy = {
 				o.operator = i2b2.h.getXNodeVal(c[i2],'operator');
 				o.dim_code = i2b2.h.getXNodeVal(c[i2],'dimcode');
 				o.basecode = i2b2.h.getXNodeVal(c[i2],'basecode');
+				oset.push(o);
+			}
+			//jgk sort by hlevel
+			oset.sort(function(a,b) {return (parseInt(a.level) > parseInt(b.level)) ? 1 : ((parseInt(b.level) > parseInt(a.level)) ? -1 : 0);} );
+			// jgk filter out subnodes by dimcode (should be fullname but wasn't sure subsystem could pull it easily)
+			var oset2 = [];
+			var tset = [];
+			for(var i2=0;i2<oset.length;i2++) {
+				var o=oset[i2];
+				var k = 1;
+				var l = tset.length;
+				while (l--) { if (o.dim_code.startsWith(tset[l])) { k=0; } }
+				if (k==1) {
+					tset.push(o.dim_code);
+					oset2.push(o);
+				} 
+				// Right now this is keeping the subsumed element for testing etc but eventually should just be commented out
+				else { o.name = '(SUBSUMED) - '+o.name; o.hasChildren = o.hasChildren.replace('A','I'); oset2.push(o); } 
+			}
+			for(var i2=0;i2<oset2.length;i2++) {
+				var o=oset2[i2];
 				// append the data node
 				var sdxDataNode = i2b2.sdx.Master.EncapsulateData('CONCPT',o);
 				var renderOptions = {
