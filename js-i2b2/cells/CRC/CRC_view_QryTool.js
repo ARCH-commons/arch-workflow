@@ -345,8 +345,8 @@ i2b2.CRC.view.QT.Resize = function (e) {
     var h = window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
 
 
-    if (w < 840) { w = 840; }
-    if (h < 517) { h = 517; }
+    if (w < i2b2.hive.cfg.ui.topWidth) {w = i2b2.hive.cfg.ui.topWidth;}
+    if (h < i2b2.hive.cfg.ui.topHeight) {h = i2b2.hive.cfg.ui.topHeight;}
 
     // resize our visual components
     //var queryToolWidth = ds.width * 0.6;
@@ -356,10 +356,10 @@ i2b2.CRC.view.QT.Resize = function (e) {
     $('crcQueryToolBox').style.left = w - 550;
     if (i2b2.WORK && i2b2.WORK.isLoaded) {
         var z = h - 400; //392 + 44 - 17 - 25;
-        if (i2b2.CRC.view.QT.isZoomed) { z += 196 - 44; }
+        if (i2b2.CRC.view.QT.isZoomed) { z += i2b2.hive.cfg.ui.bottomSpacer - 44; }
     } else {
         var z = h - 392 - 17 - 25;
-        if (i2b2.CRC.view.QT.isZoomed) { z += 196; }
+        if (i2b2.CRC.view.QT.isZoomed) { z += i2b2.hive.cfg.ui.bottomSpacer; }
     }
     // display the topic selector bar if we are in SHRINE-mode
     if (i2b2.h.isSHRINE()) {
@@ -497,14 +497,14 @@ i2b2.CRC.view.QT.ResizeHeight = function () {
     //var h = window.document.documentElement.clientHeight;
     var h = window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
 
-    if (h < 517) { h = 517; }
+    if (h < i2b2.hive.cfg.ui.topHeight) {h = i2b2.hive.cfg.ui.topHeight;}
     // resize our visual components
     if (i2b2.WORK && i2b2.WORK.isLoaded) {
-        var z = h - 400;
-        if (i2b2.CRC.view.QT.isZoomed) { z += 196 - 44; }
+        var z = h - i2b2.hive.cfg.ui.minEverythingHeight + 34;
+        if (i2b2.CRC.view.QT.isZoomed) { z += i2b2.hive.cfg.ui.bottomSpacer - 44; }
     } else {
-        var z = h - 434;
-        if (i2b2.CRC.view.QT.isZoomed) { z += 196; }
+        var z = h - i2b2.hive.cfg.ui.minEverythingHeight;
+        if (i2b2.CRC.view.QT.isZoomed) { z += i2b2.hive.cfg.ui.bottomSpacer; }
     }
     // display the topic selector bar if we are in SHRINE-mode
     if (i2b2.h.isSHRINE() && $('queryTopicPanel')) {
@@ -974,7 +974,7 @@ i2b2.events.afterCellInit.subscribe(
                 i2b2.CRC.ctrlr.QT.panelAdd(this.yuiTree);
                 i2b2.CRC.ctrlr.QT._redrawAllPanels();
 
-                //Add to define a query	
+                //Add to define a query
                 for (var i = 0; i < i2b2.CRC.ctrlr.QT.tenporalBuilders + 1; i++) {
                     var select = document.getElementById("instancevent1[" + i + "]");
                     select.options[select.options.length] = new Option('Event ' + i2b2.CRC.ctrlr.QT.temporalGroup, i2b2.CRC.ctrlr.QT.temporalGroup);
@@ -1336,6 +1336,7 @@ i2b2.events.initView.subscribe((function (eventTypeName, newMode) {
     this.visible = true;
     $('crcQueryToolBox').show();
     this.Resize();
+    this.ResizeHeight(); // jgk - Fix intermittent size problem upon init
 
     // initialize the dropdown menu for query timing
     var temporalConstraintBar = $("temporalConstraintBar");
@@ -1357,7 +1358,7 @@ i2b2.events.changedViewMode.subscribe((function (eventTypeName, newMode) {
         case "Patients":
             this.visible = true;
             $('crcQueryToolBox').show();
-            // i2b2.CRC.view.QT.splitterDragged();
+            i2b2.CRC.view.QT.splitterDragged();
             //this.Resize();
             break;
         default:

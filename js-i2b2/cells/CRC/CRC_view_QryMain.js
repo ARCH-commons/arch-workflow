@@ -76,8 +76,8 @@ i2b2.CRC.view.QM.Resize = function (e) {
     var h = window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
 
 
-    if (w < 840) { w = 840; }
-    if (h < 517) { h = 517; }
+    if (w < i2b2.hive.cfg.ui.topWidth) {w = i2b2.hive.cfg.ui.topWidth;}
+    if (h < i2b2.hive.cfg.ui.topHeight) {h = i2b2.hive.cfg.ui.topHeight;}
 
     // resize our visual components
     //var queryToolWidth = ds.width * 0.6;
@@ -87,23 +87,12 @@ i2b2.CRC.view.QM.Resize = function (e) {
     $('crcQueryToolBox').style.left = w - 550;
     if (i2b2.WORK && i2b2.WORK.isLoaded) {
         var z = h - 400; //392 + 44 - 17 - 25;
-        if (i2b2.CRC.view.QM.isZoomed) { z += 196 - 44; }
+        // if (i2b2.CRC.view.QM.isZoomed) { z += 196 - 44; }
+        if (i2b2.CRC.view.QM.isZoomed) { z += i2b2.hive.cfg.ui.bottomSpacer - 44; }
     } else {
         var z = h - 392 - 17 - 25;
-        if (i2b2.CRC.view.QM.isZoomed) { z += 196; }
+        if (i2b2.CRC.view.QM.isZoomed) { z += i2b2.hive.cfg.ui.bottomSpacer; }
     }
-    // display the topic selector bar if we are in SHRINE-mode
-    // TODO smb may have to make this conditional on which tab is displaying
-   // $('crcQueryToolBox').style.height = z;
-    // if (i2b2.h.isSHRINE()) {
-    //     $('queryTopicPanel').show();
-    //     z = z - 28;
-    // }
-
-    // $('QPD1').style.height = z;
-    // $('QPD2').style.height = z;
-    // $('QPD3').style.height = z;
-    // $('temporalbuilders').style.height = z + 50;
 }
 //YAHOO.util.Event.addListener(window, "resize", i2b2.CRC.view.QT.Resize, i2b2.CRC.view.QT); // tdw9
 
@@ -132,12 +121,15 @@ i2b2.CRC.view.QM.ResizeHeight = function () {
     if (h < 517) { h = 517; }
     // resize our visual components
     if (i2b2.WORK && i2b2.WORK.isLoaded) {
-        var z = h - 400;
-        if (i2b2.CRC.view.QM.isZoomed) { z += 196 - 44; }
+        // var z = h - 400;
+        // if (i2b2.CRC.view.QM.isZoomed) { z += 196 - 44; }
+        var z = h - i2b2.hive.cfg.ui.minEverythingHeight + 34;
+        if (i2b2.CRC.view.QM.isZoomed) { z += i2b2.hive.cfg.ui.bottomSpacer - 44; }
     } else {
         var z = h - 434;
         if (i2b2.CRC.view.QM.isZoomed) { z += 196; }
     }
+
     // display the topic selector bar if we are in SHRINE-mode
     // if (i2b2.h.isSHRINE() && $('queryTopicPanel')) {
     //     $('queryTopicPanel').show();
@@ -164,7 +156,9 @@ i2b2.events.afterCellInit.subscribe(
             console.info("EVENT RECEIVED i2b2.events.afterCellInit; Data:",en,co);
             // perform visual actions
             i2b2.CRC.view.QM.currentTab = i2b2.CRC.view.QM.TAB_CODE_QT;  	// define the initial view (AKA "tab") is visible
-            i2b2.ONT.view.QM.Resize();
+            i2b2.CRC.view.QM.Resize();
+            i2b2.CRC.view.QM.ResizeHeight();
+
             $('crcQueryToolBox').show();
 
 // -------------------------------------------------------

@@ -38,6 +38,10 @@
 		// additional configuration variables that are set by the system
 		name: "Data Repository",
 		description: "The Data Repository cell stores all information that a user saves within the i2b2 Hive.",
+		ui: {
+			'QS_width':840,
+			'QS_height':717
+		},
 		icons: {
 			size32x32: "CRC_icon_32x32.gif"
 		},
@@ -46,8 +50,8 @@
 			{thinClientName:'sortBy', defaultValue:'DATE'},
 			{thinClientName:'sortOrder', defaultValue:'DESC'},
 			{thinClientName:'maxQueriesDisp', defaultValue:20},
-			{thinClientName:'maxChildren', defaultValue:200},
-			{thinClientName:'queryTimeout', defaultValue:180}
+			{thinClientName:'maxChildren', defaultValue:500},
+			{thinClientName:'queryTimeout', defaultValue:60}
 		]
 	}
 }

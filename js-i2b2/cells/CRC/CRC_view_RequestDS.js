@@ -87,30 +87,21 @@ i2b2.CRC.view.dataSet.Resize = function (e) {
     var ve = $('crcQueryToolBox.dataSetBox');
     ve = ve.style;
 
-    if (w < 840) { w = 840; }
-    if (h < 517) { h = 517; }
-
-    // resize our visual components
-    //var queryToolWidth = ds.width * 0.6;
-    //$('crcQueryToolBox').style.left = w-queryToolWidth;
-    //debugOnScreen("crcQueryToolBox.width = " + queryToolWidth );
-
-    // $('crcQueryToolBox').style.left = w - 550;
-    // if (i2b2.WORK && i2b2.WORK.isLoaded) {
-    //     var z = h - 400; //392 + 44 - 17 - 25;
-    //     if (i2b2.CRC.view.dataSet.isZoomed) { z += 196 - 44; }
-    // } else {
-    //     var z = h - 392 - 17 - 25;
-    //     if (i2b2.CRC.view.dataSet.isZoomed) { z += 196; }
-    // }
+    if (w < i2b2.hive.cfg.ui.topWidth) {w = i2b2.hive.cfg.ui.topWidth;}
+    if (h < i2b2.hive.cfg.ui.topHeight) {h = i2b2.hive.cfg.ui.topHeight;}
 
     // TODO there has to be a better way
+    var z;
     if (i2b2.WORK && i2b2.WORK.isLoaded) {
-        var z = parseInt((h - 321)/2) + 16;
-        ve.height = z;
+        z = h - 400; //392 + 44 - 17 - 25;
+        if (i2b2.CRC.view.QM.isZoomed) { z += i2b2.hive.cfg.ui.bottomSpacer - 44; }
+//        var z = parseInt((h - 321)/2) + 16;
     } else {
-        ve.height = h-289;
+        z = h - 392 - 17 - 25;
+        if (i2b2.CRC.view.QM.isZoomed) { z += i2b2.hive.cfg.ui.bottomSpacer; }
+        //z = h-289;
     }
+    ve.height = z;
     // elStatus = $('crcStatusBox');
     // var btm = (parseInt(elStatus.style.top)) - 10;
     // $('dataSetContent').style.height = (h - btm) + 'px';
@@ -136,16 +127,22 @@ i2b2.CRC.view.dataSet.splitterDragged = function () {
 i2b2.CRC.view.dataSet.ResizeHeight = function () {
     var h = window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
     var ve = $('crcQueryToolBox.dataSetBox');
+    var z;
     ve = ve.style;
 
-    if (h < 517) { h = 517; }
+    if (h < i2b2.hive.cfg.ui.topHeight) {h = i2b2.hive.cfg.ui.topHeight;}
     // resize our visual components
     if (i2b2.WORK && i2b2.WORK.isLoaded) {
-        var z = parseInt((h - 321)/2) + 16;
-        ve.height = z;
+        // var z = parseInt((h - 321)/2) + 16;
+        // ve.height = z;
+        z = h - i2b2.hive.cfg.ui.minEverythingHeight + 34;
+        if (i2b2.CRC.view.QM.isZoomed) { z += i2b2.hive.cfg.ui.bottomSpacer - 44; }
     } else {
-        ve.height = h-289;
+//        z = h-289;
+        var z = h - i2b2.hive.cfg.ui.bottomSpacer - 80;
+        // if (i2b2.CRC.view.QT.isZoomed) { z += i2b2.hive.cfg.ui.bottomSpacer; }
     }
+    ve.height = z;
 
     // if (i2b2.WORK && i2b2.WORK.isLoaded) {
     //     var z = h - 400;
@@ -364,6 +361,7 @@ i2b2.events.afterCellInit.subscribe(
 			i2b2.CRC.ctrlr.dataSet.Init();
 
             i2b2.CRC.view.dataSet.splitterDragged();					// initialize query tool's elements
+            i2b2.CRC.view.dataSet.Resize();
             i2b2.CRC.view.dataSet.ResizeHeight();
             // ================================================================================================== //
         }
@@ -376,7 +374,7 @@ i2b2.events.initView.subscribe((function (eventTypeName, newMode) {
     this.visible = true;
     $('crcQueryToolBox').show();
     this.Resize();
-
+    this.ResizeHeight();
     // -------------------------------------------------------
 }), '', i2b2.CRC.view.dataSet);
 

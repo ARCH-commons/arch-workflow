@@ -139,7 +139,7 @@ i2b2.hive.communicatorFactory = function(cellCode){
 			if (commOptions.result_wait_time !== undefined) { sMsgValues.result_wait_time = commOptions.result_wait_time; }
 			if (parameters.result_wait_time !== undefined) { sMsgValues.result_wait_time = parameters.result_wait_time; }
 		} else {
-			sMsgValues.result_wait_time = 180;  // default to 180 second timeout within the cell if a specific timeout period was not passed
+			sMsgValues.result_wait_time = 60;  // default to 60 second timeout within the cell if a specific timeout period was not passed
 		}
 		
 		// apply message values to message template

@@ -101,11 +101,11 @@ i2b2.CRC.view.history.Resize = function(e) {
     var ve = $('crcHistoryBox');
     if (viewObj.visible) {
         ve.show();
-		// var ds = document.viewport.getDimensions();
-	    var w =  window.innerWidth || (window.document.documentElement.clientWidth || window.document.body.clientWidth);
-	    var h =  window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
-        if (w < 840) {w = 840;}
-        if (h < 517) {h = 517;}
+        // var ds = document.viewport.getDimensions();
+        var w =  window.innerWidth || (window.document.documentElement.clientWidth || window.document.body.clientWidth);
+        var h =  window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
+        if (w < i2b2.hive.cfg.ui.topWidth) {w = i2b2.hive.cfg.ui.topWidth;}
+        if (h < i2b2.hive.cfg.ui.topHeight) {h = i2b2.hive.cfg.ui.topHeight;}
         ve = ve.style;
         // resize our visual components
         switch(i2b2.hive.MasterView.getViewMode()) {
@@ -169,9 +169,9 @@ i2b2.CRC.view.history.ResizeHeight = function() {
     var ve = $('crcHistoryBox');
     if (viewObj.visible) {
         ve.show();
-		// var ds = document.viewport.getDimensions();
-	    var h =  window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
-        if (h < 517) {h = 517;}
+        // var ds = document.viewport.getDimensions();
+        var h =  window.innerHeight || (window.document.documentElement.clientHeight || window.document.body.clientHeight);
+        if (h < i2b2.hive.cfg.ui.topHeight) {h = i2b2.hive.cfg.ui.topHeight;}
         ve = ve.style;
         // resize our visual components
         switch(i2b2.hive.MasterView.getViewMode()) {
@@ -181,8 +181,8 @@ i2b2.CRC.view.history.ResizeHeight = function() {
                     ve.top = h-196+44;
                     $('crcHistoryData').style.height = '100px';
                 } else {
-                    ve.top = h-196;
-                    $('crcHistoryData').style.height = '144px';
+                    ve.top = h-i2b2.hive.cfg.ui.bottomPQSpacer;
+                    $('crcHistoryData').style.height = i2b2.hive.cfg.ui.bottomPQHeight;
                 }
                 break;
             case "Analysis":
@@ -191,8 +191,8 @@ i2b2.CRC.view.history.ResizeHeight = function() {
                     ve.top = h-196+44;
                     $('crcHistoryData').style.height = '100px';
                 } else {
-                    ve.top = h-196;
-                    $('crcHistoryData').style.height = '144px';
+                    ve.top = h-i2b2.hive.cfg.ui.bottomPQSpacer;
+                    $('crcHistoryData').style.height = i2b2.hive.cfg.ui.bottomPQHeight;
                 }
                 break;
         }
@@ -289,7 +289,7 @@ i2b2.CRC.view.history.ZoomView = function() {
 }
 
 
-// =========== Context Menu Suff =========== 
+// =========== Context Menu Suff ===========
 // ================================================================================================== //
 i2b2.CRC.view.history.doRename = function() {
     var op = i2b2.CRC.view.history.contextRecord; // object path
@@ -319,12 +319,12 @@ function openQueryFlagPrompt(){
             text: "OK",
             handler: function(){
                 var message = document.getElementById('inputQueryFlagMessage').value;
-				queryId = i2b2.CRC.view.history.contextRecord.sdxInfo.sdxKeyValue;
+                queryId = i2b2.CRC.view.history.contextRecord.sdxInfo.sdxKeyValue;
 
                 //make a call to the controller flag method.
                 i2b2.CRC.ctrlr.history.Flag({
                     queryId: queryId,
-					message: message
+                    message: message
                 });
 
                 this.cancel();
@@ -398,7 +398,7 @@ console.info("SUBSCRIBED TO i2b2.events.afterCellInit");
 i2b2.events.afterCellInit.subscribe(
     (function(en,co) {
         if (co[0].cellCode=='CRC') {
-// =========================================================			
+// =========================================================
 
             console.debug('[EVENT CAPTURED i2b2.events.afterCellInit]');
             var thisview = i2b2.CRC.view.history;
@@ -502,7 +502,7 @@ i2b2.events.afterCellInit.subscribe(
             );
             i2b2.CRC.view.history.ContextMenu.subscribe("triggerContextMenu",i2b2.CRC.view.history.ContextMenuValidate);
 
-// =========================================================			
+// =========================================================
         }
     })
 );
