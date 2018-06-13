@@ -7,6 +7,14 @@
 
 require_once('config.php');
 
+function endsWith($haystack, $needle)
+{
+    $length = strlen($needle);
+
+    return $length === 0 ||
+        (substr($haystack, -$length) === $needle);
+}
+
 try {
     if (!isset($_POST['api'])) {
         throw new RuntimeException('ARCH API type not set.  Contact ARCH development team as this is an internal error.');
@@ -16,6 +24,11 @@ try {
     }
     if (!isset($CONFIG['site_info']['ssp_url'])) {
         throw new RuntimeException('ARCH Site API URL not set.  Contact ARCH development team to properly configure plugin');
+    }
+
+    $apiEndpoint = $CONFIG['site_info']['ssp_url'];
+    if (!endsWith($apiEndpoint, "/")) {
+        $apiEndpoint .= "/";
     }
 
     $api = $_POST['api'];
@@ -33,12 +46,12 @@ try {
                 echo json_encode($output);
                 die();
             } else {
-                $endpoint = $CONFIG['ssp_url'] . 'api/cloud/site?short_name=' . $CONFIG['site'];
+                $endpoint = $apiEndpoint . 'api/cloud/site?short_name=' . $CONFIG['site'];
             }
             break;
         case 'site':
             $action = 'GET';
-            $endpoint = $CONFIG['ssp_url'] . 'api/cloud/site';
+            $endpoint = $apiEndpoint . 'api/cloud/site';
             if (isset($_GET['site']) && !empty($_GET['site'])) {
                 $endpoint .= '?short_name=' . $_GET['site'];
             }
@@ -46,13 +59,13 @@ try {
         case 'study':
             $action = 'GET';
             if (isset($_GET['study']) && !empty($_GET['study'])) {
-                $endpoint = $CONFIG['ssp_url'] . 'api/cloud/study/' . $_GET['study'];
+                $endpoint = $apiEndpoint . 'api/cloud/study/' . $_GET['study'];
             }
             break;
         case 'lds':
             $action = 'POST';
             if (isset($_POST['arch_id']) && !empty($_POST['arch_id'])) {
-                    $endpoint = $CONFIG['site_info']['ssp_url'] . 'api/lds/' . $_POST['arch_id'];
+                    $endpoint = $apiEndpoint . 'api/lds/' . $_POST['arch_id'];
             }
             break;
 
