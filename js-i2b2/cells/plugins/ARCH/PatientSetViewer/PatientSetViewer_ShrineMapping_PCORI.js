@@ -32,7 +32,7 @@ i2b2.PatientSetViewer.ShrineMapping.PCORI.getLocalMapping = function(shrineMappi
         if (shrineMapping) {
             for (var [key, val] of i2b2.PatientSetViewer.ShrineMapping.PCORI.ontologyPrefixMap) {
                 if (shrineMapping.toUpperCase().startsWith(key))
-                    return shrineMapping.replace(key, val);
+                    return [shrineMapping.replace(key, val)]; // jgk 1018 - expects a list, not a string
             }
             return null;
         } else

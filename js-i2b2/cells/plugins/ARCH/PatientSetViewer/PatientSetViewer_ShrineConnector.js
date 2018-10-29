@@ -383,17 +383,19 @@ i2b2.PatientSetViewer.ShrineConnector.shrineLoadResults = function () {
 
 
             var desc = "";
-            // Parse into JSON
-            var flagObject = JSON.parse(query.flagmessage);
-            // if (query.flagmessage)
-            if (flagObject) {
-                i2b2.PatientSetViewer.ShrineConnector.model.previousQueries[resultId].flagObject = flagObject;
-                // TODO check to see if this is actually an ARCH message?
-                // desc = query.flagmessage;
-                desc = flagObject.message;
-            } else {
-                desc = "(Not a data set request)";
-            }
+            // Parse into JSON (jgk 1018-try/catch)
+            try {
+                var flagObject = JSON.parse(query.flagmessage);
+                // if (query.flagmessage)
+                if (flagObject) {
+                   i2b2.PatientSetViewer.ShrineConnector.model.previousQueries[resultId].flagObject = flagObject;
+                    // TODO check to see if this is actually an ARCH message?
+                    // desc = query.flagmessage;
+                    desc = flagObject.message;
+                } else {
+                    desc = "(Not a data set request)";
+                }
+            } catch(e) { desc = query.flagmessage; }
 
             // desc = "<div style='width:100%;height:100%;margin:0;padding:0;overflow-x:hidden;overflow-y:auto;'>" + desc + "</div>";
 

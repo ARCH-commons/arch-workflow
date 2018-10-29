@@ -3303,12 +3303,12 @@ i2b2.PatientSetViewer.makeDateRangeConstraintText = function (conceptIndex) {   
 	var dateTo = concept.hasOwnProperty('dateTo');
 
 	if (dateFrom) {
-		if (concept.dateFrom == false) {
+		if (concept.dateFrom == false || concept.dateFrom==null) { // jgk 1018 - null seems to be happening
 			dateFrom = false;
 		}
 	}
 	if (dateTo) {
-		if (concept.dateTo == false) {
+		if (concept.dateTo == false || concept.dateFrom==null) { //jgk 1018 - null seems to be happening
 			dateTo = false;
 		}
 	}
