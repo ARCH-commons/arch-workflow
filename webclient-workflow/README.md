@@ -1,4 +1,6 @@
-# i2b2 Web Client Repository
+# i2b2 Web Client with ARCH Data Request Plugin!
+
+See [here](https://github.com/ARCH-commons/arch-workflow/wiki/webclient-workflow---Install-Notes) for installation / setup notes specific to this version!
 
 The i2b2 Web Client is a web based client that is installed on a web server. This client can be accessed by an authorized user who has access to a web browser. 
 
